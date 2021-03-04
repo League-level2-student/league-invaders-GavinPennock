@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Rocketship extends GameObject {
+	
 
 	Rocketship(int x1, int y1, int width1, int height1) {
 		super(x1, y1, width1, height1);
