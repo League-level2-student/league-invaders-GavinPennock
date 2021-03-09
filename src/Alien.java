@@ -34,11 +34,11 @@ public class Alien extends GameObject {
 		if (y > LeaugeInvaders.HEIGHT) {
 			isActive = false;
 		}
+		super.update();
 	}
 
 	public void draw(Graphics g) {
-		g.setColor(Color.YELLOW);
-		g.fillRect(x, y, width, height);
+		super.draw(g);
 		if (gotImage) {
 			g.drawImage(image, x, y, width, height, null);
 		} else {

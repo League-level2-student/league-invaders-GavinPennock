@@ -27,21 +27,27 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
-	Rocketship rocketship=new Rocketship(250,600,50,50);
-	ObjectManager objectmanager=new ObjectManager(rocketship);
+	Rocketship rocketship = new Rocketship(250, 600, 50, 50);
+	ObjectManager objectmanager = new ObjectManager(rocketship);
+	Timer alienSpawn;
+
+	public void startGame() {
+		alienSpawn = new Timer(1000, objectmanager);
+		alienSpawn.start();
+	}
 
 	void loadImage(String imageFile) {
-	    if (needImage) {
-	        try {
-	            image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
-		    gotImage = true;
-	        } catch (Exception e) {
-	            
-	        }
-	        needImage = false;
-	    }
+		if (needImage) {
+			try {
+				image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
+				gotImage = true;
+			} catch (Exception e) {
+
+			}
+			needImage = false;
+		}
 	}
-	
+
 	public GamePanel() {
 		// main menu page text
 		titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -55,7 +61,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		frameDraw = new Timer(1000 / 60, this);
 		frameDraw.start();
 		if (needImage) {
-		    loadImage ("space.png");
+			loadImage("space.png");
 		}
 	}
 
@@ -64,6 +70,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void updateGameState() {
 		objectmanager.update();
+		if(rocketship.isActive==false) {
+			currentState=END;
+		}
 	}
 
 	void updateEndState() {
@@ -90,7 +99,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void drawGameState(Graphics g) {
 		if (gotImage) {
-			g.drawImage(image, 0, 0, LeaugeInvaders.WIDTH, LeaugeInvaders.HEIGHT-125, null);
+			g.drawImage(image, 0, 0, LeaugeInvaders.WIDTH, LeaugeInvaders.HEIGHT - 125, null);
 		} else {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, LeaugeInvaders.WIDTH, LeaugeInvaders.HEIGHT);
@@ -152,37 +161,50 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			objectmanager.addProjectile(rocketship.getProjectile());
 
+		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 			if (currentState == END) {
 				currentState = MENU;
-			} else {
-				currentState++;
+			} else if (currentState == MENU) {
+				currentState = GAME;
+				startGame();
+			} else if (currentState == GAME) {
+				currentState = END;
+				alienSpawn.stop();
 			}
+			// if (currentState == END) {
+			// currentState = MENU;
+			// } else {
+			// currentState++;
+
+			// }
 		}
 		if (e.getKeyCode() == KeyEvent.VK_UP && currentState == GAME) {
 			System.out.println("UP");
-			if(rocketship.y>10) {
+			if (rocketship.y > 10) {
 				rocketship.up();
 			}
-			
+
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT && currentState == GAME) {
 			System.out.println("LEFT");
-			if(rocketship.x>10) {
+			if (rocketship.x > 10) {
 				rocketship.left();
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentState == GAME) {
 			System.out.println("RIGHT");
-			if(rocketship.x<440) {
+			if (rocketship.x < 440) {
 				rocketship.right();
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN && currentState == GAME) {
 			System.out.println("DOWN");
-			if(rocketship.y<610) {
+			if (rocketship.y < 610) {
 				rocketship.down();
 			}
 		}
