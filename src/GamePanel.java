@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -118,7 +119,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		// enemies killed text
 		g.setFont(enimiesKilledFont);
 		g.setColor(Color.BLACK);
-		g.drawString("you killed ___ enemies", 120, 325);
+		g.drawString("you killed "+objectmanager.getscore()+" enemies", 120, 325);
 		// restart text
 		g.setFont(restartFont);
 		g.setColor(Color.BLACK);
@@ -161,12 +162,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getKeyCode() == KeyEvent.VK_SPACE&& currentState==MENU){
+			JOptionPane.showMessageDialog(null, "press space to shoot. try to hit enimies, use arrow keys to move, don't let enimies hit you");
+		}
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			objectmanager.addProjectile(rocketship.getProjectile());
-
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
+			if(currentState==END) {
+				rocketship=new Rocketship(250, 600, 50, 50);
+			objectmanager=new ObjectManager(rocketship);
+			}
 			if (currentState == END) {
 				currentState = MENU;
 			} else if (currentState == MENU) {
@@ -176,12 +182,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				currentState = END;
 				alienSpawn.stop();
 			}
-			// if (currentState == END) {
-			// currentState = MENU;
-			// } else {
-			// currentState++;
-
-			// }
+			
+			
 		}
 		if (e.getKeyCode() == KeyEvent.VK_UP && currentState == GAME) {
 			System.out.println("UP");
@@ -213,6 +215,30 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentState == GAME) {
+			System.out.println("RIGHT");
+			if (rocketship.x < 440) {
+				rocketship.right();
+			}
+		}
+		if (e.getKeyCode() == KeyEvent.VK_DOWN && currentState == GAME) {
+			System.out.println("DOWN");
+			if (rocketship.y < 610) {
+				rocketship.down();
+			}
+		}
+		if (e.getKeyCode() == KeyEvent.VK_UP && currentState == GAME) {
+			System.out.println("UP");
+			if (rocketship.y > 10) {
+				rocketship.up();
+			}
 
+		}
+		if (e.getKeyCode() == KeyEvent.VK_LEFT && currentState == GAME) {
+			System.out.println("LEFT");
+			if (rocketship.x > 10) {
+				rocketship.left();
+			}
+		}
 	}
 }

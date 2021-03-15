@@ -11,7 +11,7 @@ public class Projectile extends GameObject {
 
 	Projectile(int x1, int y1, int width1, int height1) {
 		super(x1, y1, width1, height1);
-		speed = 1;
+		speed = 10;
 		if (needImage) {
 			loadImage("bullet.png");
 		}

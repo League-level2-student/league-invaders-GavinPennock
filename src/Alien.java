@@ -38,7 +38,7 @@ public class Alien extends GameObject {
 	}
 
 	public void draw(Graphics g) {
-		super.draw(g);
+		//super.draw(g);
 		if (gotImage) {
 			g.drawImage(image, x, y, width, height, null);
 		} else {
